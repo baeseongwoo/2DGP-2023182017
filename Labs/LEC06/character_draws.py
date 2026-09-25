@@ -11,7 +11,9 @@ def move_circle():
     print("원")
     for degree in range(0,360,1):
         thetha=radians(degree)
-        draw_character(x, y)
+        x1=x+150*cos(thetha)
+        y1=y+150*sin(thetha)
+        draw_character(x1, y1)
     pass
 
 def move_rectangle():
