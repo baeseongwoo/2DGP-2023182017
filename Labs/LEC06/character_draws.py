@@ -18,8 +18,9 @@ def move_circle():
 
 def move_rectangle():
     print("사각형")
-    draw_character(400, 300)
-
+    move_bottom()
+    
+    
     pass
 
 def move_triangle():
@@ -33,6 +34,11 @@ def draw_character(x, y):
     character.draw(x,y)
     update_canvas()
     delay(0.01)
+
+def move_bottom():
+    for x in range(200,601,5):
+        draw_character(x,200)
+
 
     
 while True:
