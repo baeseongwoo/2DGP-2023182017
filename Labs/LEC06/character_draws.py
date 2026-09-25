@@ -68,7 +68,7 @@ def move_triangle_right():
 
 def move_triangle_bottom():
     for t in range(100):
-        x=600+(200-600)*t/100
+        x=200+(600-200)*t/100
         draw_character(x,200)
 
 while True:
