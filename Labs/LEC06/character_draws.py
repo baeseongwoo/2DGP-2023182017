@@ -26,9 +26,9 @@ def move_rectangle():
 
 def move_triangle():
     print("삼각형")
-    move_triangle_left()
-    move_triangle_right()
     move_triangle_bottom()
+    move_triangle_right()
+    move_triangle_left()
     pass
 
 def draw_character(x, y):
