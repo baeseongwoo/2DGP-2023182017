@@ -66,12 +66,16 @@ def move_left():
 
 def move_triangle_left():
     for t in range(0,100,):
+        clear_canvas()
+        draw_triangle()
         x=400+(200-400)*t/100
         y=400+(200-400)*t/100
         draw_character(x,y)
 
 def move_triangle_right():
     for t in range(100):
+        clear_canvas()
+        draw_triangle()
         x=600+(400-600)*t/100
         y=200+(400-200)*t/100
         draw_character(x,y)
