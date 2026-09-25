@@ -10,12 +10,12 @@ y=300
 def move_circle():
     print("원")
     for degree in range(0,360,1):
+        clear_canvas()
         thetha=radians(degree)
         x1=x+150*cos(thetha)
         y1=y+150*sin(thetha)
         draw_circle(400,300,150)
         draw_character(x1, y1)
-        draw_circle(400,300,150)
     pass
 
 def move_rectangle():
@@ -35,7 +35,7 @@ def move_triangle():
 
 def draw_character(x, y):
     print("캐릭터 그리기")
-    clear_canvas()
+    #clear_canvas()
     character.draw(x,y)
     update_canvas()
     delay(0.01)
