@@ -1,20 +1,15 @@
 # 실습 과제 진행
 from pico2d import*
+from math import*
 
 open_canvas(800,600)
 character = load_image('character.png')
 
-clear_canvas()
-character.draw(400,300)
-update_canvas()
-
 x=400
 y=300
-
-
 def move_circle():
     print("원")
-    draw_character(400, 300)
+    draw_character(x, y)
     pass
 
 def move_rectangle():
@@ -33,13 +28,11 @@ def draw_character(x, y):
     clear_canvas()
     character.draw(x,y)
     update_canvas()
-    
 
+    
 while True:
     move_circle()
-
     move_rectangle()
-
     move_triangle()
     pass
 
