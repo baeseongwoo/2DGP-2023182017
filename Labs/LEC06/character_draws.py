@@ -78,6 +78,8 @@ def move_triangle_right():
 
 def move_triangle_bottom():
     for t in range(100):
+        clear_canvas()
+        draw_line(200,200,600,200)
         x=200+(600-200)*t/100
         draw_character(x,200)
 
