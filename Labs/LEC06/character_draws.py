@@ -9,7 +9,9 @@ x=400
 y=300
 def move_circle():
     print("원")
-    draw_character(x, y)
+    for degree in range(0,360,1):
+        thetha=radians(degree)
+        draw_character(x, y)
     pass
 
 def move_rectangle():
