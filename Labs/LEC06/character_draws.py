@@ -14,22 +14,26 @@ y=300
 
 def move_circle():
     print("원")
-    draw_character()
+    draw_character(400, 300)
     pass
 
 def move_rectangle():
     print("사각형")
-    draw_character()
+    draw_character(400, 300)
 
     pass
 
 def move_triangle():
     print("삼각형")
-    draw_character()
+    draw_character(400, 300)
     pass
 
-def draw_character():
+def draw_character(x, y):
     print("캐릭터 그리기")
+    clear_canvas()
+    character.draw(x,y)
+    update_canvas()
+    
 
 while True:
     move_circle()
