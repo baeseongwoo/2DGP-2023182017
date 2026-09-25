@@ -20,6 +20,8 @@ def move_circle():
 
 def move_rectangle():
     print("사각형")
+    clear_canvas()
+    draw_rectangle(200,400,600,200)
     move_bottom()
     move_right()
     move_top()
