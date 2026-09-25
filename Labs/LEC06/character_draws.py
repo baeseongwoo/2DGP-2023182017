@@ -20,7 +20,7 @@ def move_rectangle():
     print("사각형")
     move_bottom()
     move_right()
-    
+    move_top()
     pass
 
 def move_triangle():
@@ -42,6 +42,10 @@ def move_bottom():
 def move_right():
     for y in range(200,401,5):
         draw_character(600,y)
+
+def move_top():
+    for x in range(600,199,-5):
+        draw_character(x,400)
 
 
 
