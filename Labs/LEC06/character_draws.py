@@ -19,7 +19,7 @@ def move_circle():
 def move_rectangle():
     print("사각형")
     move_bottom()
-    
+    move_right()
     
     pass
 
@@ -39,8 +39,12 @@ def move_bottom():
     for x in range(200,601,5):
         draw_character(x,200)
 
+def move_right():
+    for y in range(200,401,5):
+        draw_character(600,y)
 
-    
+
+
 while True:
     move_circle()
     move_rectangle()
