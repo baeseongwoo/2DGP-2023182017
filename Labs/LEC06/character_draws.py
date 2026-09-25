@@ -13,7 +13,9 @@ def move_circle():
         thetha=radians(degree)
         x1=x+150*cos(thetha)
         y1=y+150*sin(thetha)
+        draw_circle(400,300,150)
         draw_character(x1, y1)
+        draw_circle(400,300,150)
     pass
 
 def move_rectangle():
