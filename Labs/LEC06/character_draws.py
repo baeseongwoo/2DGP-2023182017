@@ -48,14 +48,20 @@ def move_bottom():
 
 def move_right():
     for y in range(200,401,2):
+        clear_canvas()
+        draw_rectangle(200,400,600,200)
         draw_character(600,y)
 
 def move_top():
     for x in range(600,199,-2):
+        clear_canvas()
+        draw_rectangle(200,400,600,200)
         draw_character(x,400)
 
 def move_left():
     for y in range(400,199,-2):
+        clear_canvas()
+        draw_rectangle(200,400,600,200)
         draw_character(200,y)
 
 def move_triangle_left():
