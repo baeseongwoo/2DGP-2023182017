@@ -28,7 +28,7 @@ def move_triangle():
     print("삼각형")
     move_triangle_left()
     move_triangle_right()
-
+    move_triangle_bottom()
     pass
 
 def draw_character(x, y):
@@ -66,6 +66,10 @@ def move_triangle_right():
         y=400+(200-400)*t/100
         draw_character(x,y)
 
+def move_triangle_bottom():
+    for t in range(100):
+        x=600+(200-600)*t/100
+        draw_character(x,200)
 
 while True:
     move_circle()
