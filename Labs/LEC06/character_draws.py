@@ -37,19 +37,19 @@ def draw_character(x, y):
     delay(0.01)
 
 def move_bottom():
-    for x in range(200,601,5):
+    for x in range(200,601,2):
         draw_character(x,200)
 
 def move_right():
-    for y in range(200,401,5):
+    for y in range(200,401,2):
         draw_character(600,y)
 
 def move_top():
-    for x in range(600,199,-5):
+    for x in range(600,199,-2):
         draw_character(x,400)
 
 def move_left():
-    for y in range(400,199,-5):
+    for y in range(400,199,-2):
         draw_character(200,y)
 
 while True:
