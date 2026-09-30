@@ -11,17 +11,26 @@ BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
 
 # 한 스텝 = 동시에 그릴 스프라이트 목록 (left, bottom, width, height, dx, dy)
-def make_steps(rects, align='center'):
-    # 프레임마다 크기가 달라도 가로 중앙 정렬 (align='left'면 가장 넓은 프레임 기준 왼쪽 정렬),
+def make_steps(rects):
+    # 일반 동작: 프레임마다 크기가 달라도 가로 중앙 정렬,
     # 세로는 시트상의 높이 차이(점프 착지 등)를 유지하도록 가장 낮은 bottom을 땅으로 맞춤
     base = min(b for l, b, w, h in rects)
-    max_w = max(w for l, b, w, h in rects)
-    steps = []
-    for l, b, w, h in rects:
-        dx = -max_w / 2 if align == 'left' else -w / 2
-        steps.append([(l, b, w, h, dx, b - base)])
-    return steps
+    return [[(l, b, w, h, -w / 2, b - base)] for l, b, w, h in rects]
 
+
+# 오오다마 라센간 공격용 스프라이트
+# 기준점 = 라센간이 땅에 닿는 지점, 나루토는 그 왼쪽 BALL_X 만큼 떨어져 있음
+BALL_X = 107
+FEET = 1418  # 내려찍기 프레임에서 나루토 발이 있는 시트상의 bottom
+
+CHARGE = [(l, b, w, h, -BALL_X, 0) for l, b, w, h in
+          [(32, 1624, 114, 80), (168, 1624, 110, 78), (308, 1624, 114, 73), (449, 1624, 110, 79)]]
+SLAM = [(l, b, w, h, -BALL_X, b - FEET) for l, b, w, h in
+        [(30, 1418, 115, 80), (171, 1413, 111, 96), (316, 1413, 148, 127), (493, 1411, 168, 133)]]
+ATTACK_STEPS = (
+    [[c] for c in CHARGE] +     # 1) 라센간 모으기
+    [[s] for s in SLAM]         # 2) 내려찍기
+)
 
 ANIMATIONS = [
     {'name': 'stance', 'scale': 6, 'delay': 0.12, 'steps': make_steps(
@@ -36,10 +45,7 @@ ANIMATIONS = [
     {'name': 'jump', 'scale': 6, 'delay': 0.15, 'steps': make_steps(
         [(24, 5046, 34, 63), (73, 5046, 34, 63), (140, 5046, 49, 64),
          (203, 5046, 49, 63), (277, 5035, 31, 43)])},
-    {'name': 'attack', 'scale': 5, 'delay': 0.15, 'steps': make_steps(
-        # 오오다마 라센간: 나루토는 프레임 왼쪽에 있고 이펙트가 오른쪽으로 커지므로 왼쪽 기준 정렬
-        [(30, 1418, 115, 80), (171, 1413, 111, 96),
-         (316, 1413, 148, 127), (493, 1411, 168, 133)], 'left')},
+    {'name': 'attack', 'scale': 5, 'delay': 0.15, 'steps': ATTACK_STEPS},
 ]
 
 
