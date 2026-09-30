@@ -3,8 +3,8 @@ import pico2d.pico2d as p2d
 
 # 스프라이트 시트 출처: DS Naruto Shippuden: Ninja Council 4 - Naruto (The Spriters Resource)
 
-CANVAS_W, CANVAS_H = 1000, 700
-GROUND_Y = 120          # 캐릭터 발이 닿는 화면 y좌표
+CANVAS_W, CANVAS_H = 1200, 800
+GROUND_Y = 150          # 캐릭터 발이 닿는 화면 y좌표
 LOOP_COUNT = 5          # 애니메이션별 반복 횟수
 PAUSE_TIME = 1.0        # 애니메이션 사이 정지 시간(초)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
@@ -39,16 +39,16 @@ ATTACK_STEPS = (
 )
 
 ANIMATIONS = [
-    {'name': 'stance', 'scale': 6, 'delay': 0.12, 'steps': make_steps(
+    {'name': 'stance', 'scale': 7, 'delay': 0.12, 'steps': make_steps(
         [(25, 5394, 43, 58), (82, 5394, 43, 56), (140, 5394, 43, 55),
          (196, 5394, 43, 55), (251, 5394, 43, 56), (309, 5394, 43, 57)])},
-    {'name': 'walk', 'scale': 6, 'delay': 0.1, 'steps': make_steps(
+    {'name': 'walk', 'scale': 7, 'delay': 0.1, 'steps': make_steps(
         [(28, 5281, 23, 60), (65, 5281, 38, 59), (118, 5282, 36, 58),
          (170, 5282, 23, 59), (207, 5281, 36, 59), (258, 5281, 31, 59)])},
-    {'name': 'run', 'scale': 6, 'delay': 0.08, 'steps': make_steps(
+    {'name': 'run', 'scale': 7, 'delay': 0.08, 'steps': make_steps(
         [(386, 5281, 44, 48), (442, 5287, 58, 43), (517, 5283, 50, 48),
          (581, 5283, 41, 46), (633, 5287, 55, 45), (703, 5281, 52, 49)])},
-    {'name': 'jump', 'scale': 6, 'delay': 0.15, 'steps': make_steps(
+    {'name': 'jump', 'scale': 7, 'delay': 0.15, 'steps': make_steps(
         [(24, 5046, 34, 63), (73, 5046, 34, 63), (140, 5046, 49, 64),
          (203, 5046, 49, 63), (277, 5035, 31, 43)])},
     {'name': 'attack', 'scale': 5, 'delay': 0.12, 'steps': ATTACK_STEPS},
