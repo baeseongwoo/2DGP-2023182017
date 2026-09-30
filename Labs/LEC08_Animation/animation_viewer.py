@@ -10,7 +10,11 @@ PAUSE_TIME = 1.0        # 애니메이션 사이 정지 시간(초)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
 
-# 한 스텝 = 동시에 그릴 스프라이트 목록 (left, bottom, width, height, dx, dy)
+# 스프라이트 하나 = (left, bottom, width, height, dx, dy)
+#   left, bottom, width, height : 시트에서 잘라낼 영역 (bottom은 pico2d 기준, 이미지 아래쪽에서부터의 거리)
+#   dx, dy : 화면 기준점(가로 중앙, 땅)에서 스프라이트 왼쪽 아래 모서리까지의 거리 (시트 픽셀 단위)
+# 한 스텝 = 동시에 그릴 스프라이트 목록 (공격처럼 캐릭터 + 땅 이펙트를 겹쳐 그릴 수 있음)
+
 def make_steps(rects):
     # 일반 동작: 프레임마다 크기가 달라도 가로 중앙 정렬,
     # 세로는 시트상의 높이 차이(점프 착지 등)를 유지하도록 가장 낮은 bottom을 땅으로 맞춤
