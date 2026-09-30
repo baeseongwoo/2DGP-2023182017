@@ -27,9 +27,15 @@ CHARGE = [(l, b, w, h, -BALL_X, 0) for l, b, w, h in
           [(32, 1624, 114, 80), (168, 1624, 110, 78), (308, 1624, 114, 73), (449, 1624, 110, 79)]]
 SLAM = [(l, b, w, h, -BALL_X, b - FEET) for l, b, w, h in
         [(30, 1418, 115, 80), (171, 1413, 111, 96), (316, 1413, 148, 127), (493, 1411, 168, 133)]]
+# 땅 충격파 링: 라센간 착지 지점을 중심으로 퍼짐 (타원 중심이 땅보다 살짝 아래)
+RING = [(l, b, w, h, -w / 2, -h / 2 - 3) for l, b, w, h in
+        [(31, 1578, 56, 12), (111, 1576, 102, 16), (235, 1570, 142, 28),
+         (394, 1564, 172, 44), (582, 1560, 218, 49)]]
+
 ATTACK_STEPS = (
-    [[c] for c in CHARGE] +     # 1) 라센간 모으기
-    [[s] for s in SLAM]         # 2) 내려찍기
+    [[c] for c in CHARGE] +                              # 1) 라센간 모으기
+    [[RING[i], SLAM[min(i, len(SLAM) - 1)]]              # 2) 내려찍기 + 충격파 (링 5장, 마지막 프레임 유지)
+     for i in range(len(RING))]
 )
 
 ANIMATIONS = [
@@ -45,7 +51,7 @@ ANIMATIONS = [
     {'name': 'jump', 'scale': 6, 'delay': 0.15, 'steps': make_steps(
         [(24, 5046, 34, 63), (73, 5046, 34, 63), (140, 5046, 49, 64),
          (203, 5046, 49, 63), (277, 5035, 31, 43)])},
-    {'name': 'attack', 'scale': 5, 'delay': 0.15, 'steps': ATTACK_STEPS},
+    {'name': 'attack', 'scale': 5, 'delay': 0.12, 'steps': ATTACK_STEPS},
 ]
 
 
