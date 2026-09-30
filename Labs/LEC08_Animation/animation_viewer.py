@@ -10,9 +10,20 @@ LOOP_COUNT = 5          # 애니메이션별 반복 횟수
 PAUSE_TIME = 1.0        # 애니메이션 사이 정지 시간(초)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
-# stance 프레임 (left, bottom, width, height), bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
-STANCE = [(25, 5394, 43, 58), (82, 5394, 43, 56), (140, 5394, 43, 55),
-          (196, 5394, 43, 55), (251, 5394, 43, 56), (309, 5394, 43, 57)]
+# 프레임마다 크기가 다르므로 (left, bottom, width, height)를 프레임별로 저장
+# bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
+ANIMATIONS = [
+    {
+        'name': 'stance',
+        'frames': [(25, 5394, 43, 58), (82, 5394, 43, 56), (140, 5394, 43, 55),
+                   (196, 5394, 43, 55), (251, 5394, 43, 56), (309, 5394, 43, 57)],
+    },
+    {
+        'name': 'walk',
+        'frames': [(28, 5281, 23, 60), (65, 5281, 38, 59), (118, 5282, 36, 58),
+                   (170, 5282, 23, 59), (207, 5281, 36, 59), (258, 5281, 31, 59)],
+    },
+]
 
 
 def load_image_colorkey(path, color):
@@ -35,22 +46,22 @@ def handle_events():
             running = False
 
 
-def draw_frame(frames, frame):
+def draw_frame(anim, frame):
     # 프레임 크기가 달라도 발이 땅에 붙어 있도록 왼쪽 아래 기준으로 그리고, 가로는 중앙 정렬
-    left, bottom, w, h = frames[frame]
+    left, bottom, w, h = anim['frames'][frame]
     x = CANVAS_W // 2 - w * SCALE // 2
     clear_canvas()
     sheet.clip_draw_to_origin(left, bottom, w, h, x, GROUND_Y, w * SCALE, h * SCALE)
     update_canvas()
 
 
-def play(frames):
+def play(anim):
     for _ in range(LOOP_COUNT):
-        for frame in range(len(frames)):
+        for frame in range(len(anim['frames'])):
             if not running:
                 return
             handle_events()
-            draw_frame(frames, frame)
+            draw_frame(anim, frame)
             delay(0.12)
     delay(PAUSE_TIME)
 
@@ -60,6 +71,9 @@ sheet = load_image_colorkey('naruto_sheet.png', BG_COLOR)
 
 running = True
 while running:
-    play(STANCE)
+    for anim in ANIMATIONS:
+        if not running:
+            break
+        play(anim)
 
 close_canvas()
