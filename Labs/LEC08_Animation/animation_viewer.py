@@ -4,6 +4,7 @@ import pico2d.pico2d as p2d
 # 스프라이트 시트 출처: DS Naruto Shippuden: Ninja Council 4 - Naruto (The Spriters Resource)
 
 CANVAS_W, CANVAS_H = 800, 600
+GROUND_Y = 100          # 캐릭터 발이 닿는 화면 y좌표
 SCALE = 6               # 확대 배율 (캐릭터가 화면 높이의 절반 이상)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
@@ -23,13 +24,20 @@ def load_image_colorkey(path, color):
     return Image(texture)
 
 
+def draw_frame(frame):
+    # 프레임 크기가 달라도 발이 땅에 붙어 있도록 왼쪽 아래 기준으로 그리고, 가로는 중앙 정렬
+    left, bottom, w, h = STANCE[frame]
+    x = CANVAS_W // 2 - w * SCALE // 2
+    clear_canvas()
+    sheet.clip_draw_to_origin(left, bottom, w, h, x, GROUND_Y, w * SCALE, h * SCALE)
+    update_canvas()
+
+
 open_canvas(CANVAS_W, CANVAS_H)
 sheet = load_image_colorkey('naruto_sheet.png', BG_COLOR)
 
-for left, bottom, w, h in STANCE:
-    clear_canvas()
-    sheet.clip_draw(left, bottom, w, h, CANVAS_W // 2, CANVAS_H // 2, w * SCALE, h * SCALE)
-    update_canvas()
+for frame in range(len(STANCE)):
+    draw_frame(frame)
     delay(0.12)
 
 close_canvas()
