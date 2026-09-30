@@ -4,6 +4,7 @@ import pico2d.pico2d as p2d
 # 스프라이트 시트 출처: DS Naruto Shippuden: Ninja Council 4 - Naruto (The Spriters Resource)
 
 CANVAS_W, CANVAS_H = 800, 600
+SCALE = 6               # 확대 배율 (캐릭터가 화면 높이의 절반 이상)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
 # stance 프레임 (left, bottom, width, height), bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
@@ -27,7 +28,7 @@ sheet = load_image_colorkey('naruto_sheet.png', BG_COLOR)
 
 for left, bottom, w, h in STANCE:
     clear_canvas()
-    sheet.clip_draw(left, bottom, w, h, CANVAS_W // 2, CANVAS_H // 2)
+    sheet.clip_draw(left, bottom, w, h, CANVAS_W // 2, CANVAS_H // 2, w * SCALE, h * SCALE)
     update_canvas()
     delay(0.12)
 
