@@ -69,6 +69,15 @@ def draw_frame(anim, frame):
     update_canvas()
 
 
+def wait(seconds):
+    # 정지 중에도 창 닫기/ESC가 먹도록 잘게 나눠서 대기
+    elapsed = 0.0
+    while running and elapsed < seconds:
+        handle_events()
+        delay(0.05)
+        elapsed += 0.05
+
+
 def play(anim):
     for _ in range(LOOP_COUNT):
         for frame in range(len(anim['frames'])):
@@ -77,7 +86,7 @@ def play(anim):
             handle_events()
             draw_frame(anim, frame)
             delay(anim['delay'])
-    delay(PAUSE_TIME)
+    wait(PAUSE_TIME)
 
 
 open_canvas(CANVAS_W, CANVAS_H)
