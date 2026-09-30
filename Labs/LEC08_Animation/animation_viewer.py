@@ -26,6 +26,15 @@ def load_image_colorkey(path, color):
     return Image(texture)
 
 
+def handle_events():
+    global running
+    for event in get_events():
+        if event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
+
+
 def draw_frame(frames, frame):
     # 프레임 크기가 달라도 발이 땅에 붙어 있도록 왼쪽 아래 기준으로 그리고, 가로는 중앙 정렬
     left, bottom, w, h = frames[frame]
@@ -38,6 +47,9 @@ def draw_frame(frames, frame):
 def play(frames):
     for _ in range(LOOP_COUNT):
         for frame in range(len(frames)):
+            if not running:
+                return
+            handle_events()
             draw_frame(frames, frame)
             delay(0.12)
     delay(PAUSE_TIME)
@@ -46,6 +58,8 @@ def play(frames):
 open_canvas(CANVAS_W, CANVAS_H)
 sheet = load_image_colorkey('naruto_sheet.png', BG_COLOR)
 
-play(STANCE)
+running = True
+while running:
+    play(STANCE)
 
 close_canvas()
