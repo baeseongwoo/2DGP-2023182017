@@ -9,35 +9,37 @@ LOOP_COUNT = 5          # 애니메이션별 반복 횟수
 PAUSE_TIME = 1.0        # 애니메이션 사이 정지 시간(초)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
 
-# 프레임마다 크기가 다르므로 (left, bottom, width, height)를 프레임별로 저장
-# bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
+
+# 한 스텝 = 동시에 그릴 스프라이트 목록 (left, bottom, width, height, dx, dy)
+def make_steps(rects, align='center'):
+    # 프레임마다 크기가 달라도 가로 중앙 정렬 (align='left'면 가장 넓은 프레임 기준 왼쪽 정렬),
+    # 세로는 시트상의 높이 차이(점프 착지 등)를 유지하도록 가장 낮은 bottom을 땅으로 맞춤
+    base = min(b for l, b, w, h in rects)
+    max_w = max(w for l, b, w, h in rects)
+    steps = []
+    for l, b, w, h in rects:
+        dx = -max_w / 2 if align == 'left' else -w / 2
+        steps.append([(l, b, w, h, dx, b - base)])
+    return steps
+
+
 ANIMATIONS = [
-    {
-        'name': 'stance', 'scale': 6, 'delay': 0.12, 'align': 'center',
-        'frames': [(25, 5394, 43, 58), (82, 5394, 43, 56), (140, 5394, 43, 55),
-                   (196, 5394, 43, 55), (251, 5394, 43, 56), (309, 5394, 43, 57)],
-    },
-    {
-        'name': 'walk', 'scale': 6, 'delay': 0.1, 'align': 'center',
-        'frames': [(28, 5281, 23, 60), (65, 5281, 38, 59), (118, 5282, 36, 58),
-                   (170, 5282, 23, 59), (207, 5281, 36, 59), (258, 5281, 31, 59)],
-    },
-    {
-        'name': 'run', 'scale': 6, 'delay': 0.08, 'align': 'center',
-        'frames': [(386, 5281, 44, 48), (442, 5287, 58, 43), (517, 5283, 50, 48),
-                   (581, 5283, 41, 46), (633, 5287, 55, 45), (703, 5281, 52, 49)],
-    },
-    {
-        'name': 'jump', 'scale': 6, 'delay': 0.15, 'align': 'center',
-        'frames': [(24, 5046, 34, 63), (73, 5046, 34, 63), (140, 5046, 49, 64),
-                   (203, 5046, 49, 63), (277, 5035, 31, 43)],
-    },
-    {
+    {'name': 'stance', 'scale': 6, 'delay': 0.12, 'steps': make_steps(
+        [(25, 5394, 43, 58), (82, 5394, 43, 56), (140, 5394, 43, 55),
+         (196, 5394, 43, 55), (251, 5394, 43, 56), (309, 5394, 43, 57)])},
+    {'name': 'walk', 'scale': 6, 'delay': 0.1, 'steps': make_steps(
+        [(28, 5281, 23, 60), (65, 5281, 38, 59), (118, 5282, 36, 58),
+         (170, 5282, 23, 59), (207, 5281, 36, 59), (258, 5281, 31, 59)])},
+    {'name': 'run', 'scale': 6, 'delay': 0.08, 'steps': make_steps(
+        [(386, 5281, 44, 48), (442, 5287, 58, 43), (517, 5283, 50, 48),
+         (581, 5283, 41, 46), (633, 5287, 55, 45), (703, 5281, 52, 49)])},
+    {'name': 'jump', 'scale': 6, 'delay': 0.15, 'steps': make_steps(
+        [(24, 5046, 34, 63), (73, 5046, 34, 63), (140, 5046, 49, 64),
+         (203, 5046, 49, 63), (277, 5035, 31, 43)])},
+    {'name': 'attack', 'scale': 5, 'delay': 0.15, 'steps': make_steps(
         # 오오다마 라센간: 나루토는 프레임 왼쪽에 있고 이펙트가 오른쪽으로 커지므로 왼쪽 기준 정렬
-        'name': 'attack', 'scale': 5, 'delay': 0.15, 'align': 'left',
-        'frames': [(30, 1418, 115, 80), (171, 1413, 111, 96),
-                   (316, 1413, 148, 127), (493, 1411, 168, 133)],
-    },
+        [(30, 1418, 115, 80), (171, 1413, 111, 96),
+         (316, 1413, 148, 127), (493, 1411, 168, 133)], 'left')},
 ]
 
 
@@ -61,22 +63,13 @@ def handle_events():
             running = False
 
 
-def draw_frame(anim, frame):
-    left, bottom, w, h = anim['frames'][frame]
+def draw_step(anim, step):
     scale = anim['scale']
-
-    # 같은 동작 안에서 시트상의 높이 차이(점프 착지 등)를 유지하도록 가장 낮은 bottom을 기준으로 보정
-    base = min(f[1] for f in anim['frames'])
-    y = GROUND_Y + (bottom - base) * scale
-
-    if anim['align'] == 'left':
-        max_w = max(f[2] for f in anim['frames'])
-        x = CANVAS_W // 2 - max_w * scale // 2
-    else:
-        x = CANVAS_W // 2 - w * scale // 2
-
     clear_canvas()
-    sheet.clip_draw_to_origin(left, bottom, w, h, x, y, w * scale, h * scale)
+    for left, bottom, w, h, dx, dy in step:
+        x = CANVAS_W // 2 + dx * scale
+        y = GROUND_Y + dy * scale
+        sheet.clip_draw_to_origin(left, bottom, w, h, x, y, w * scale, h * scale)
     update_canvas()
 
 
@@ -91,11 +84,11 @@ def wait(seconds):
 
 def play(anim):
     for _ in range(LOOP_COUNT):
-        for frame in range(len(anim['frames'])):
+        for step in anim['steps']:
             if not running:
                 return
             handle_events()
-            draw_frame(anim, frame)
+            draw_step(anim, step)
             delay(anim['delay'])
     wait(PAUSE_TIME)
 
