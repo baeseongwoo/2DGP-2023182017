@@ -57,11 +57,15 @@ def handle_events():
 
 
 def draw_frame(anim, frame):
-    # 프레임 크기가 달라도 발이 땅에 붙어 있도록 왼쪽 아래 기준으로 그리고, 가로는 중앙 정렬
     left, bottom, w, h = anim['frames'][frame]
+
+    # 같은 동작 안에서 시트상의 높이 차이(점프 착지 등)를 유지하도록 가장 낮은 bottom을 기준으로 보정
+    base = min(f[1] for f in anim['frames'])
+    y = GROUND_Y + (bottom - base) * SCALE
     x = CANVAS_W // 2 - w * SCALE // 2
+
     clear_canvas()
-    sheet.clip_draw_to_origin(left, bottom, w, h, x, GROUND_Y, w * SCALE, h * SCALE)
+    sheet.clip_draw_to_origin(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
     update_canvas()
 
 
