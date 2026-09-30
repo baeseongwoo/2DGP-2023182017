@@ -3,8 +3,8 @@ import pico2d.pico2d as p2d
 
 # 스프라이트 시트 출처: DS Naruto Shippuden: Ninja Council 4 - Naruto (The Spriters Resource)
 
-CANVAS_W, CANVAS_H = 800, 600
-GROUND_Y = 100          # 캐릭터 발이 닿는 화면 y좌표
+CANVAS_W, CANVAS_H = 1000, 700
+GROUND_Y = 120          # 캐릭터 발이 닿는 화면 y좌표
 LOOP_COUNT = 5          # 애니메이션별 반복 횟수
 PAUSE_TIME = 1.0        # 애니메이션 사이 정지 시간(초)
 BG_COLOR = (0, 128, 0)  # 시트의 초록 배경색 -> 투명 처리
@@ -34,7 +34,7 @@ ANIMATIONS = [
     },
     {
         # 오오다마 라센간: 나루토는 프레임 왼쪽에 있고 이펙트가 오른쪽으로 커지므로 왼쪽 기준 정렬
-        'name': 'attack', 'scale': 3, 'delay': 0.15, 'align': 'left',
+        'name': 'attack', 'scale': 5, 'delay': 0.15, 'align': 'left',
         'frames': [(30, 1418, 115, 80), (171, 1413, 111, 96),
                    (316, 1413, 148, 127), (493, 1411, 168, 133)],
     },
