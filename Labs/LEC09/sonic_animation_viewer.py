@@ -11,11 +11,13 @@ def handle_events():
 
 
 open_canvas(1200, 800)
+sheet = load_image('sonic-sprite.png')
 
 running = True
 while running:
     handle_events()
     clear_canvas()
+    sheet.draw(600, 400)
     update_canvas()
     delay(0.05)
 
