@@ -4,6 +4,10 @@ CANVAS_W, CANVAS_H = 1200, 800
 SCALE = 8               # 확대 배율
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 
+# 프레임 하나 = (left, bottom, width, height)
+IDLE = [(1, 447, 29, 39), (31, 447, 26, 38), (58, 447, 29, 39), (87, 447, 29, 39),
+        (118, 447, 30, 38), (150, 447, 30, 38), (182, 447, 29, 39)]
+
 
 def handle_events():
     global running
@@ -28,8 +32,11 @@ sheet = load_image('sonic-sprite.png')
 
 running = True
 while running:
-    handle_events()
-    draw_frame((1, 447, 29, 39))
-    delay(0.05)
+    for frame in IDLE:
+        handle_events()
+        if not running:
+            break
+        draw_frame(frame)
+        delay(0.15)
 
 close_canvas()
