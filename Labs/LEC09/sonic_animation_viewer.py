@@ -1,13 +1,20 @@
 from pico2d import *
 
+# 소닉 스프라이트 시트(sonic-sprite.png)의 모든 동작을 차례로 재생하는 애니메이션 뷰어
+# 동작 하나를 LOOP_COUNT번 반복 -> PAUSE_TIME초 정지 -> 다음 동작, 끝나면 처음부터 무한 반복
+# 스프라이트 출처: Classic Sonic Sprites (Zeper the hedgehog, edits by balla)
+
 CANVAS_W, CANVAS_H = 1200, 800
-SCALE = 8               # 확대 배율
+SCALE = 8               # 확대 배율 (원본 프레임은 약 30x40px)
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 LOOP_COUNT = 5          # 동작별 반복 횟수
 PAUSE_TIME = 1.0        # 동작 사이 정지 시간(초)
 
 # 프레임 하나 = (left, bottom, width, height)
+#   시트에서 잘라낼 영역. bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
+#   프레임 크기와 간격이 제각각이라 격자로 나누지 않고 좌표를 직접 적는다
 # 동작 하나 = 이름, 프레임 간 지연 시간(초), 프레임 목록
+#   시트의 위쪽 행부터 차례로 나열 (동작 이름은 그림을 보고 붙인 것)
 ANIMATIONS = [
     {'name': 'idle', 'delay': 0.15, 'frames': [
         (1, 447, 29, 39), (31, 447, 26, 38), (58, 447, 28, 39), (86, 447, 30, 38),
