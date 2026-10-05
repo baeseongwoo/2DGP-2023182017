@@ -1,5 +1,9 @@
 from pico2d import *
 
+CANVAS_W, CANVAS_H = 1200, 800
+SCALE = 8               # 확대 배율
+GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
+
 
 def handle_events():
     global running
@@ -10,14 +14,14 @@ def handle_events():
             running = False
 
 
-open_canvas(1200, 800)
+open_canvas(CANVAS_W, CANVAS_H)
 sheet = load_image('sonic-sprite.png')
 
 running = True
 while running:
     handle_events()
     clear_canvas()
-    sheet.draw(600, 400)
+    sheet.draw(CANVAS_W // 2, CANVAS_H // 2)
     update_canvas()
     delay(0.05)
 
