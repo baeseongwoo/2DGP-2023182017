@@ -10,6 +10,7 @@ GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 LOOP_COUNT = 5          # 동작별 반복 횟수
 PAUSE_TIME = 1.0        # 동작 사이 정지 시간(초)
 START_X = 160           # 이동하는 동작이 출발하는 화면 x좌표
+EDGE = 160              # 캐릭터가 화면 밖으로 완전히 나갔다고 보는 여유 폭 (가장 넓은 프레임의 절반)
 TICK = 0.01             # 화면을 다시 그리는 간격(초)
 
 # 프레임 하나 = (left, bottom, width, height)
@@ -98,6 +99,9 @@ def play(anim):
             break
         x += anim['speed'] * (now - prev)
         prev = now
+        if x > CANVAS_W + EDGE:
+            # 화면 오른쪽으로 완전히 나가면 왼쪽 밖에서 다시 들어온다
+            x -= CANVAS_W + EDGE * 2
         draw_frame(frames[index % len(frames)], int(x), base)
         delay(TICK)
     wait(PAUSE_TIME)
