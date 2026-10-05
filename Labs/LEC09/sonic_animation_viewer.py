@@ -58,6 +58,10 @@ sheet = load_image('sonic-sprite.png')
 
 running = True
 while running:
-    play(ANIMATIONS[0])
+    # 모든 동작을 차례로 재생하고, 끝나면 처음부터 다시 반복
+    for anim in ANIMATIONS:
+        if not running:
+            break
+        play(anim)
 
 close_canvas()
