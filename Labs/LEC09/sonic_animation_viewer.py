@@ -9,6 +9,8 @@ SCALE = 8               # 확대 배율 (원본 프레임은 약 30x40px)
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 LOOP_COUNT = 5          # 동작별 반복 횟수
 PAUSE_TIME = 1.0        # 동작 사이 정지 시간(초)
+START_X = 160           # 이동하는 동작이 출발하는 화면 x좌표
+TICK = 0.01             # 화면을 다시 그리는 간격(초)
 
 # 프레임 하나 = (left, bottom, width, height)
 #   시트에서 잘라낼 영역. bottom은 pico2d 기준(이미지 아래쪽에서부터의 거리)
@@ -82,15 +84,22 @@ def wait(seconds):
 
 
 def play(anim):
-    base = min(bottom for left, bottom, w, h in anim['frames'])
-    x = CANVAS_W // 2
-    for _ in range(LOOP_COUNT):
-        for frame in anim['frames']:
-            handle_events()
-            if not running:
-                return
-            draw_frame(frame, x, base)
-            delay(anim['delay'])
+    frames = anim['frames']
+    base = min(bottom for left, bottom, w, h in frames)
+    # 제자리 동작은 화면 중앙에서, 이동하는 동작은 왼쪽에서 출발
+    x = START_X if anim['speed'] > 0 else CANVAS_W // 2
+    start = prev = get_time()
+    while running:
+        handle_events()
+        # 프레임은 경과 시간으로 고르고, 위치는 TICK마다 조금씩 옮겨 부드럽게 이동시킨다
+        now = get_time()
+        index = int((now - start) / anim['delay'])
+        if index >= len(frames) * LOOP_COUNT:
+            break
+        x += anim['speed'] * (now - prev)
+        prev = now
+        draw_frame(frames[index % len(frames)], int(x), base)
+        delay(TICK)
     wait(PAUSE_TIME)
 
 
