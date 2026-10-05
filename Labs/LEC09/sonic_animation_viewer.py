@@ -3,6 +3,7 @@ from pico2d import *
 CANVAS_W, CANVAS_H = 1200, 800
 SCALE = 8               # 확대 배율
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
+LOOP_COUNT = 5          # 동작별 반복 횟수
 
 # 프레임 하나 = (left, bottom, width, height)
 # 동작 하나 = 이름, 프레임 간 지연 시간(초), 프레임 목록
@@ -32,12 +33,13 @@ def draw_frame(frame):
 
 
 def play(anim):
-    for frame in anim['frames']:
-        handle_events()
-        if not running:
-            return
-        draw_frame(frame)
-        delay(anim['delay'])
+    for _ in range(LOOP_COUNT):
+        for frame in anim['frames']:
+            handle_events()
+            if not running:
+                return
+            draw_frame(frame)
+            delay(anim['delay'])
 
 
 open_canvas(CANVAS_W, CANVAS_H)
