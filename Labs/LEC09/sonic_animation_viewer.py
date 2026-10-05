@@ -60,15 +60,14 @@ def handle_events():
             running = False
 
 
-def draw_frame(frame, base):
-    # 가로는 화면 중앙에 프레임 중앙을 맞춘다
+def draw_frame(frame, x, base):
+    # 가로는 캐릭터 위치 x에 프레임 중앙을 맞춘다
     # 세로는 동작의 기준선(base, 가장 낮은 bottom)을 바닥선에 맞추고,
     # 시트에서 기준선보다 떠 있는 프레임은 그만큼 띄워서 발이 들리는 높이 차이를 유지한다
     left, bottom, w, h = frame
-    x = CANVAS_W // 2 - w * SCALE // 2
     y = GROUND_Y + (bottom - base) * SCALE
     clear_canvas()
-    sheet.clip_draw_to_origin(left, bottom, w, h, x, y, w * SCALE, h * SCALE)
+    sheet.clip_draw_to_origin(left, bottom, w, h, x - w * SCALE // 2, y, w * SCALE, h * SCALE)
     update_canvas()
 
 
@@ -83,12 +82,13 @@ def wait(seconds):
 
 def play(anim):
     base = min(bottom for left, bottom, w, h in anim['frames'])
+    x = CANVAS_W // 2
     for _ in range(LOOP_COUNT):
         for frame in anim['frames']:
             handle_events()
             if not running:
                 return
-            draw_frame(frame, base)
+            draw_frame(frame, x, base)
             delay(anim['delay'])
     wait(PAUSE_TIME)
 
