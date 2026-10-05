@@ -5,8 +5,12 @@ SCALE = 8               # 확대 배율
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 
 # 프레임 하나 = (left, bottom, width, height)
-IDLE = [(1, 447, 29, 39), (31, 447, 26, 38), (58, 447, 29, 39), (87, 447, 29, 39),
-        (118, 447, 30, 38), (150, 447, 30, 38), (182, 447, 29, 39)]
+# 동작 하나 = 이름, 프레임 간 지연 시간(초), 프레임 목록
+ANIMATIONS = [
+    {'name': 'idle', 'delay': 0.15, 'frames': [
+        (1, 447, 29, 39), (31, 447, 26, 38), (58, 447, 29, 39), (87, 447, 29, 39),
+        (118, 447, 30, 38), (150, 447, 30, 38), (182, 447, 29, 39)]},
+]
 
 
 def handle_events():
@@ -27,16 +31,20 @@ def draw_frame(frame):
     update_canvas()
 
 
+def play(anim):
+    for frame in anim['frames']:
+        handle_events()
+        if not running:
+            return
+        draw_frame(frame)
+        delay(anim['delay'])
+
+
 open_canvas(CANVAS_W, CANVAS_H)
 sheet = load_image('sonic-sprite.png')
 
 running = True
 while running:
-    for frame in IDLE:
-        handle_events()
-        if not running:
-            break
-        draw_frame(frame)
-        delay(0.15)
+    play(ANIMATIONS[0])
 
 close_canvas()
