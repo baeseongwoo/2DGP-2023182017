@@ -21,7 +21,7 @@ running = True
 while running:
     handle_events()
     clear_canvas()
-    sheet.draw(CANVAS_W // 2, CANVAS_H // 2)
+    sheet.clip_draw_to_origin(1, 447, 29, 39, 100, 100, 29 * SCALE, 39 * SCALE)
     update_canvas()
     delay(0.05)
 
