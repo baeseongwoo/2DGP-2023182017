@@ -4,6 +4,7 @@ CANVAS_W, CANVAS_H = 1200, 800
 SCALE = 8               # 확대 배율
 GROUND_Y = 120          # 발이 닿는 바닥선의 화면 y좌표
 LOOP_COUNT = 5          # 동작별 반복 횟수
+PAUSE_TIME = 1.0        # 동작 사이 정지 시간(초)
 
 # 프레임 하나 = (left, bottom, width, height)
 # 동작 하나 = 이름, 프레임 간 지연 시간(초), 프레임 목록
@@ -32,6 +33,15 @@ def draw_frame(frame):
     update_canvas()
 
 
+def wait(seconds):
+    # 정지 중에도 창 닫기/ESC가 먹도록 잘게 나눠서 대기
+    elapsed = 0.0
+    while running and elapsed < seconds:
+        handle_events()
+        delay(0.05)
+        elapsed += 0.05
+
+
 def play(anim):
     for _ in range(LOOP_COUNT):
         for frame in anim['frames']:
@@ -40,6 +50,7 @@ def play(anim):
                 return
             draw_frame(frame)
             delay(anim['delay'])
+    wait(PAUSE_TIME)
 
 
 open_canvas(CANVAS_W, CANVAS_H)
