@@ -18,6 +18,7 @@ class Boy:
         self.dir = 0
         self.face_dir = 1
         self.pressed_keys = set()
+        self.item = 'SmallBall'  # None / 'SmallBall' / 'BigBall', 시작은 작은 공(1번)
 
         self.machine = Machine(
             model=self,
