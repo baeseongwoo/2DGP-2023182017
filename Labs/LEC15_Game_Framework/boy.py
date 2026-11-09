@@ -48,7 +48,12 @@ class Boy:
         self.frame = 0
 
     def fire_ball(self):
-        ball = Ball(self.x, self.y, self.face_dir * 10)
+        if self.item == 'SmallBall':
+            ball = Ball(self.x, self.y, self.face_dir * 10, 'small')
+        elif self.item == 'BigBall':
+            ball = Ball(self.x, self.y, self.face_dir * 15, 'big')
+        else:
+            return
         game_world.add_oject(ball)
 
     def handle_event(self, event):
