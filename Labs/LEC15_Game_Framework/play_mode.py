@@ -48,10 +48,16 @@ def render():
     update_canvas()
 
 
+paused_at = 0.0
+
+
 def pause():
+    global paused_at
+    paused_at = get_time()
     # 아이템 창/일시정지 중에는 눌려 있던 방향키 상태를 버려서 멈춘 채로 대기
     boy.reset_input()
 
 
 def resume():
-    pass
+    # 멈춰 있던 시간은 잠들기까지의 대기 시간(5초)에 포함하지 않는다
+    boy.idle_started_at += get_time() - paused_at
