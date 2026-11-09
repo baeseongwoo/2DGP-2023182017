@@ -3,6 +3,7 @@ from pico2d import *
 import game_framework
 import game_world
 import item_mode
+import pause_mode
 import title_mode
 from boy import Boy
 from grass import Grass
@@ -31,6 +32,8 @@ def handle_events():
             game_framework.change_mode(title_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             game_framework.push_mode(item_mode)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            game_framework.push_mode(pause_mode)
         else:
             boy.handle_event(event)
 
@@ -46,7 +49,7 @@ def render():
 
 
 def pause():
-    # 아이템 창이 열리면 눌려 있던 방향키 상태를 버려서 멈춘 채로 대기
+    # 아이템 창/일시정지 중에는 눌려 있던 방향키 상태를 버려서 멈춘 채로 대기
     boy.reset_input()
 
 
