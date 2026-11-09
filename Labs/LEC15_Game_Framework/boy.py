@@ -56,6 +56,12 @@ class Boy:
             return
         game_world.add_oject(ball)
 
+    def reset_input(self):
+        self.pressed_keys.clear()
+        if self.state == 'RUN':
+            self.dir = 0
+            self.stop_run()
+
     def handle_event(self, event):
         if (event.type == SDL_KEYDOWN and
                 event.key == SDLK_SPACE and

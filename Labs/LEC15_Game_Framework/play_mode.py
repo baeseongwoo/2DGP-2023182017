@@ -46,7 +46,8 @@ def render():
 
 
 def pause():
-    pass
+    # 아이템 창이 열리면 눌려 있던 방향키 상태를 버려서 멈춘 채로 대기
+    boy.reset_input()
 
 
 def resume():
