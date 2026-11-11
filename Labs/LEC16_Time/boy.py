@@ -10,7 +10,18 @@ from ball import Ball
 
 import game_framework
 
+# Boy Run Speed
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0 # Km / Hour 가벼운 달리기 조깅 속도
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+# Boy Action Speed
+STRIDE_LENGTH_M = 0.8  # 보폭 길이
+RUN_FRAMES_PER_STRIDE = 5  # 1개 보폭에 대한 애니메이션 프레임 수
+# 프레임 증가 속도, 즉 1초당 몇개 프레임을 증가시켜야 하는가?
+RUN_FRAMES_PER_SECOND = RUN_SPEED_MPS / STRIDE_LENGTH_M * RUN_FRAMES_PER_STRIDE
 
 
 
@@ -24,6 +35,7 @@ class Idle:
             boy.fall_asleep()
         else:
             boy.frame = (boy.frame + 1) % 8
+            
 
     def draw(self, boy):
         row = 300 if boy.face_dir == 1 else 200
@@ -63,13 +75,13 @@ class Run:
         boy.frame = 0
 
     def do(self, boy):
-        boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
+        boy.frame = (boy.frame + RUN_FRAMES_PER_SECOND * game_framework.frame_time) % 8
+        boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         boy.x = max(25, min(get_canvas_width() - 25, boy.x))
 
     def draw(self, boy):
         row = 100 if boy.face_dir == 1 else 0
-        boy.image.clip_draw(boy.frame * 100, row, 100, 100, boy.x, boy.y)
+        boy.image.clip_draw(int(boy.frame) * 100, row, 100, 100, boy.x, boy.y)
 
     def space(self, boy):
         boy.fire_ball()
@@ -80,7 +92,7 @@ class Run:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 25, 90
         self.frame = 0
         self.image = load_image('animation_sheet.png')
         self.idle_started_at = get_time()
@@ -88,7 +100,7 @@ class Boy:
         self.face_dir = 1
         self.pressed_keys = set()
         self.item = 'Ball'
-
+        self.font = load_font('ENCR10B.TTF', 16)
         self.states = {'IDLE': Idle(), 'SLEEP': Sleep(), 'RUN': Run()}
 
         self.machine = Machine(
@@ -120,7 +132,7 @@ class Boy:
     def fire_ball(self):
         if self.item is None:
             return
-        ball = Ball(self.x, self.y, self.face_dir * 10, 1 if self.item == 'Ball' else 2)
+        ball = Ball(self.x, self.y, self.face_dir, 1 if self.item == 'Ball' else 2)
         game_world.add_oject(ball)
 
     def pause(self):
@@ -159,3 +171,5 @@ class Boy:
 
     def draw(self):
         self.states[self.state].draw(self)
+        self.font.draw(self.x - 60, self.y + 50, f'(Time: {get_time():.2f})', (255, 255, 0))
+
